@@ -1,0 +1,25 @@
+---
+summary: Index of implementation plans with status, plus the plan lifecycle and conventions
+read_when: Designing the next unit of work, starting an approved plan, or checking what is in progress
+---
+
+# Implementation plans
+
+A plan is one unit of work an agent can carry out without further guidance. RFCs ([decisions](../decisions/README.md)) record _why_ a boundary exists; plans record _how_ a unit is built and proven done.
+
+| Plan | Status | Unit |
+| --- | --- | --- |
+
+## Lifecycle
+
+- **Draft:** designing with the owner; open questions allowed.
+- **Approved:** the owner explicitly approved it and **Open questions** is empty. Only Approved plans are implemented.
+- **In progress:** being implemented. At most one at a time, linked from [status.md](../status.md).
+- **Done:** acceptance criteria checked, the `AGENTS.md` Definition of Done complete, Completion record filled in. Never rewritten afterward; follow-ups get a new plan.
+- **Superseded:** replaced by the plan named in its header.
+
+## Conventions
+
+- Copy [TEMPLATE.md](TEMPLATE.md) to `NNNN-short-title.md` (next number) and add a row above.
+- Changing an architectural boundary needs an accepted RFC first, listed under Related RFCs.
+- One cohesive, reviewable unit per plan: split work spanning more than one major concern or user-visible feature.
