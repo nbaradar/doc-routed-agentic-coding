@@ -1,6 +1,6 @@
 # Default layout
 
-Adapt to the project; omit what it doesn't need.
+Adapt to the project; omit what it doesn't need. The workflow skills are installed per user, not stored in the project.
 
 ```text
 CLAUDE.md                 "@AGENTS.md" (Claude Code loads the contract automatically)
@@ -15,10 +15,6 @@ docs/
   decisions/              RFCs / ADRs + README index and conventions
   plans/                  NNNN-title.md plans + TEMPLATE.md + README index with statuses
   future/                 deliberately deferred work and its rules
-.claude/skills/
-  project-status/         short status report
-  plan-unit/              design → plan → owner approval
-  implement-plan/         implement an approved plan → Definition of Done
 .github/pull_request_template.md
 scripts/check-docs.mjs    documentation enforcement
 ```

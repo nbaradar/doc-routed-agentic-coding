@@ -1,6 +1,6 @@
 ---
 name: adopt-routed-workflow
-description: Migrate a repository to documentation-routed agentic coding — a lean always-loaded AGENTS.md with a routing table, indexed topic docs with summary/read_when headers, status and history files, RFCs, implementation plans, a Definition of Done, doc-enforcement checks, and the /project-status, /plan-unit, and /implement-plan skills. Sets up the structure from scratch in a repo without agent docs, or migrates existing documentation into it without losing information. Use when the user wants to set up or migrate a project to this workflow, restructure bloated agent docs (AGENTS.md, CLAUDE.md, PLAN.md), or reduce the context an agent loads at session start.
+description: Migrate a repository to documentation-routed agentic coding — a lean always-loaded AGENTS.md with a routing table, indexed topic docs with summary/read_when headers, status and history files, RFCs, implementation plans, a Definition of Done, and doc-enforcement checks, used with the optional /project-status, /plan-unit, and /implement-plan skills. Sets up the structure from scratch in a repo without agent docs, or migrates existing documentation into it without losing information. Use when the user wants to set up or migrate a project to this workflow, restructure bloated agent docs (AGENTS.md, CLAUDE.md, PLAN.md), or reduce the context an agent loads at session start.
 ---
 
 # Adopt the documentation-routed workflow
@@ -10,7 +10,7 @@ Set up, or migrate the current repository to, this structure:
 - **Contract:** `AGENTS.md` holds only the rules that always apply, plus a "Where to look" routing table. `CLAUDE.md` contains `@AGENTS.md`.
 - **Topic docs:** under `docs/`, each with `summary`/`read_when` front matter and listed in `docs/README.md`.
 - **Work artifacts:** `docs/status.md` (replaced each unit), `docs/history.md` (one dated entry per unit), `docs/decisions/` (RFCs), and `docs/plans/` (implementation plans with a lifecycle).
-- **Workflow:** design → plan (owner approval) → implement → Definition of Done, run by the `/project-status`, `/plan-unit`, and `/implement-plan` skills.
+- **Workflow:** design → plan (owner approval) → implement → Definition of Done. The rules live in the project's `AGENTS.md`, so the repository documents its own workflow for any agent or tool. The `/project-status`, `/plan-unit`, and `/implement-plan` skills are optional procedures for following those rules; they are installed once per user from this skill's repository, not copied into projects.
 - **Enforcement:** `check-docs.mjs` fails when docs drift.
 
 Resources are in this skill's directory (the one containing this file): `templates/` and `scripts/`. Read a template only when you reach the step that uses it.
@@ -53,7 +53,7 @@ Report the inventory, the token baseline, and the classification summary.
 2. Ask the user only what the repo cannot tell you, in one short round: a one-to-two sentence description of the project; any hard rules or invariants (things an agent must never do); what counts as high-risk or irreversible (for the "When to stop and ask" list); and the first thing they want to build, if known.
 3. Propose the layout for this project (default in `templates/layout.md`; omit directories the project doesn't need yet, such as `docs/decisions/` or `docs/future/`) and **wait for approval**.
 4. Create the files from the step 4 table and wire `check-docs.mjs` into the project's checks as step 4 describes. In `AGENTS.md`, fill the routing table with rows for the docs that exist now; there is no need to invent topic docs. Add a topic doc only when the user supplied content for it. Leave `docs/status.md` describing the real current state, and `docs/history.md` with a single dated "Adopted documentation-routed workflow" entry.
-5. If the user named a first thing to build, offer to run `/plan-unit` for it after setup (the new skills may need a Claude Code restart first).
+5. If the user named a first thing to build, offer to run `/plan-unit` for it after setup (if the workflow skills are installed).
 
 Then continue with step 5 (Verify) and step 7 (Report), reporting the default-load token size of the new structure instead of before/after figures.
 
@@ -79,9 +79,10 @@ Create these from `templates/`, adapting names, commands, and routing rows to th
 | `docs/README.md`, `docs/status.md`, `docs/history.md` | `templates/docs-README.md`, `templates/status.md`, `templates/history.md` |
 | `docs/decisions/README.md` (only if the project has, or will use, RFCs/ADRs) | `templates/decisions-README.md` |
 | `docs/plans/README.md`, `docs/plans/TEMPLATE.md` | `templates/plans-README.md`, `templates/plan-TEMPLATE.md` |
-| `.claude/skills/project-status/`, `plan-unit/`, `implement-plan/` | `templates/skills/*/SKILL.md` |
 | `.github/pull_request_template.md` (if the project uses GitHub PRs) | `templates/pull_request_template.md` |
 | `scripts/check-docs.mjs` | `scripts/check-docs.mjs` (adjust its config block) |
+
+Do not copy the workflow skills into the project. Check whether `/project-status`, `/plan-unit`, and `/implement-plan` are installed for the user (for example, in `~/.claude/skills/`). If they are missing, tell the user to run `./install.sh` (or `./install.sh --link`) from the repository this skill came from; the project works without them, because the rules are in `AGENTS.md`. If the project already has its own copies in `.claude/skills/`, point out that per-user and project skills with the same name conflict, and ask before removing the project copies.
 
 Wire `check-docs.mjs` into the project's normal checks (for example, a `docs:check` package script run by the test command or CI) and list it in `AGENTS.md`'s commands and Definition of Done. Existing project work that is already specified becomes a Draft plan (with the original text kept verbatim in a "Source handoff" section), not prose in `status.md`.
 

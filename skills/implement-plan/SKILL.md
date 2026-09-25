@@ -1,9 +1,11 @@
 ---
 name: implement-plan
-description: Implement an Approved implementation plan from docs/plans/ end to end, then complete the Definition of Done in AGENTS.md. Use when the owner asks to implement, build, or run a plan, e.g. "/implement-plan 0002".
+description: Implement an Approved implementation plan from docs/plans/ end to end, then complete the Definition of Done in AGENTS.md, in a repository that uses the documentation-routed workflow. Use when the owner asks to implement, build, or run a plan, e.g. "/implement-plan 0002".
 ---
 
 # Implement an approved plan
+
+The workflow's rules and the Definition of Done are in the project's `AGENTS.md`; this skill is the procedure for following them. If the repository has no `docs/plans/`, say so and suggest `/adopt-routed-workflow`.
 
 The argument is a plan number or path. If none is given, use the plan that `docs/status.md` names as in progress or next, and confirm it with the owner.
 
@@ -24,7 +26,7 @@ The argument is a plan number or path. If none is given, use the plan that `docs
 
 - Follow the plan's **Steps** in order, writing the listed tests alongside the code.
 - Keep changes inside the plan's scope. Record anything worth doing that is outside scope as a follow-up for the Completion record, rather than doing it.
-- If reality contradicts the plan (for example, an RFC rule cannot be enforced as written), stop and ask. Do not quietly change the design.
+- If reality contradicts the plan (for example, a documented rule cannot be enforced as written), stop and ask. Do not quietly change the design.
 
 ## 4. Verify
 
@@ -32,15 +34,7 @@ Run every command under the plan's **Verification** and fix failures. Check off 
 
 ## 5. Finish
 
-Complete every item of the **Definition of Done** in `AGENTS.md`:
-
-- Update each document under **Documentation to update**.
-- Replace the relevant parts of `docs/status.md`.
-- Add one dated entry to `docs/history.md`.
-- Update `README.md` for user-visible changes.
-- Set the plan to **Done** in the plan and in `docs/plans/README.md`, and fill in the **Completion record**: date, verified counts, deviations and why, what was not verified, and follow-up work.
-
-Run `node scripts/check-docs.mjs` again.
+Complete every item of the **Definition of Done** in `AGENTS.md`. The plan-specific parts: update each document under the plan's **Documentation to update**, set the plan to **Done** in the plan and in `docs/plans/README.md`, and fill in its **Completion record**. Then re-run the documentation checks.
 
 ## 6. Report
 

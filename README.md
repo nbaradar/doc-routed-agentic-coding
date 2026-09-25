@@ -18,12 +18,12 @@ Requires [Claude Code](https://docs.claude.com/en/docs/claude-code/overview). Th
 ```bash
 git clone https://github.com/nbaradar/doc-routed-agentic-coding.git doc-routed-agentic-coding
 cd doc-routed-agentic-coding
-./install.sh          # copies the skill to ~/.claude/skills/
+./install.sh          # copies the four skills to ~/.claude/skills/
 # or
-./install.sh --link   # symlinks it instead, so `git pull` keeps it updated
+./install.sh --link   # symlinks them instead, so edits and `git pull` apply everywhere
 ```
 
-Restart Claude Code so the skill is picked up.
+Start a new Claude Code session so the skills are picked up. The skills are installed once for your user and work in every repository; they are not copied into projects.
 
 ## Use
 
@@ -44,27 +44,30 @@ It works on a new branch, waits for your approval of the layout before editing, 
 
 ### After setup: the day-to-day loop
 
-The skill installs three project skills into `.claude/skills/`:
+The workflow's rules live in the project's `AGENTS.md`, so the repository documents its own workflow for any agent or tool. Three skills make following those rules quick:
 
 1. **`/project-status`**: a short report of what was last built, what's in progress, and what needs you.
-2. **`/plan-unit`**: design the next piece of work together; it writes a plan and asks you to **Approve**, **Revise**, or **Keep as Draft**.
+2. **`/plan-unit`**: design the next piece of work together; it writes a plan and asks you to **Approve**, **Revise**, or **Keep as Draft**. `/plan-unit NNNN` resumes a Draft.
 3. **`/implement-plan <n>`**: ideally in a fresh session, the agent implements the approved plan on its own and runs the Definition of Done.
 
 ## What's in this repo
 
 ```text
-install.sh                          installs the skill for your user
-skills/adopt-routed-workflow/
-  SKILL.md                          the skill's instructions
-  templates/                        AGENTS.md skeleton, doc templates, plan template,
-                                    PR template, and the three project skills
-  scripts/
-    check-docs.mjs                  dependency-free documentation checks (settings at the top)
-    coverage.py                     proves a migration lost nothing
-    measure.py                      estimates tokens (characters ÷ 4)
+install.sh                          installs the skills for your user (copy, or --link)
+skills/
+  adopt-routed-workflow/            sets up or migrates a repository
+    SKILL.md                        the skill's instructions
+    templates/                      AGENTS.md skeleton, doc templates, plan template, PR template
+    scripts/
+      check-docs.mjs                dependency-free documentation checks (settings at the top)
+      coverage.py                   proves a migration lost nothing
+      measure.py                    estimates tokens (characters ÷ 4)
+  project-status/                   short status report
+  plan-unit/                        design → plan → approval, or resume a Draft
+  implement-plan/                   implement an approved plan → Definition of Done
 ```
 
-Everything under `skills/adopt-routed-workflow/` is self-contained. You can also use the pieces on their own; for example, copy `scripts/check-docs.mjs` into any repo that follows the same doc conventions.
+Each skill is self-contained and generic: project-specific details, such as check commands and which changes need an RFC, come from the project's `AGENTS.md`. You can also use the pieces on their own; for example, copy `scripts/check-docs.mjs` into any repo that follows the same doc conventions.
 
 ## Status
 

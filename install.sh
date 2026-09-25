@@ -1,24 +1,45 @@
 #!/usr/bin/env bash
-# Install the adopt-routed-workflow skill as a personal Claude Code skill.
-#   ./install.sh          copy the skill into ~/.claude/skills
-#   ./install.sh --link   symlink it instead, so `git pull` updates it
+# Install this repository's skills as personal Claude Code skills.
+#   ./install.sh          copy each skill into ~/.claude/skills
+#   ./install.sh --link   symlink each skill instead, so edits and `git pull`
+#                         take effect everywhere without reinstalling
+# Existing skills with the same name are left untouched; remove them first
+# to reinstall. Override the target with CLAUDE_SKILLS_DIR.
 set -euo pipefail
 
-source_dir="$(cd "$(dirname "$0")" && pwd)/skills/adopt-routed-workflow"
-target_dir="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}/adopt-routed-workflow"
-
-mkdir -p "$(dirname "$target_dir")"
-if [ -e "$target_dir" ] || [ -L "$target_dir" ]; then
-  echo "Already exists: $target_dir"
-  echo "Remove it first to reinstall."
-  exit 1
+repo_dir="$(cd "$(dirname "$0")" && pwd)"
+target_root="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
+mode="${1:-copy}"
+if [ "$mode" != "copy" ] && [ "$mode" != "--link" ]; then
+  echo "Usage: ./install.sh [--link]" >&2
+  exit 2
 fi
 
-if [ "${1:-}" = "--link" ]; then
-  ln -s "$source_dir" "$target_dir"
-  echo "Linked $target_dir -> $source_dir"
-else
-  cp -R "$source_dir" "$target_dir"
-  echo "Installed $target_dir"
-fi
-echo "Restart Claude Code, then run /adopt-routed-workflow in a repository."
+mkdir -p "$target_root"
+installed=0
+skipped=0
+for source_dir in "$repo_dir"/skills/*/; do
+  name="$(basename "$source_dir")"
+  source_dir="${source_dir%/}"
+  target="$target_root/$name"
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source_dir" ]; then
+      echo "Already linked: $name"
+    else
+      echo "Skipped (already exists, remove it to reinstall): $target"
+      skipped=$((skipped + 1))
+    fi
+    continue
+  fi
+  if [ "$mode" = "--link" ]; then
+    ln -s "$source_dir" "$target"
+    echo "Linked:    $name -> $source_dir"
+  else
+    cp -R "$source_dir" "$target"
+    echo "Installed: $name"
+  fi
+  installed=$((installed + 1))
+done
+
+echo "$installed installed, $skipped skipped. Start a new Claude Code session to pick up new skills."
+[ "$skipped" -eq 0 ]
