@@ -5,11 +5,13 @@ description: Design the next unit of work with the owner and write it up as an i
 
 # Plan a unit of work
 
+Command examples below use Claude Code syntax (`/skill-name`). In Codex, use `$skill-name` instead, including in suggested next steps.
+
 Design with the owner; write no application code. The workflow's rules (stages, approval, Definition of Done, documentation discipline) are in the project's `AGENTS.md`; this skill is the procedure for following them. If the repository has no `docs/plans/`, say so and suggest `/adopt-routed-workflow`.
 
 0. **Start or resume.**
    - **A plan number or path was given** (e.g. `/plan-unit 0001`): open that plan. If it is Draft, resume it (below). If it is Approved or later, say so and stop; changing it needs the owner's explicit go-ahead, and a Done plan is never rewritten (follow-ups get a new plan).
-   - **No argument:** check the plans index for Draft plans. If any exist, ask the owner whether to resume one of them or start a new plan (use AskUserQuestion when available).
+   - **No argument:** check the plans index for Draft plans. If any exist, ask the owner whether to resume one of them or start a new plan (use an available user-question tool when appropriate, otherwise ask in conversation).
    - **Resuming a Draft:** summarize where it stands (goal, scope, decisions already made, open questions), then re-check it against the current code and docs, since a Draft can go stale (migration numbers, renamed files, work since landed). List anything stale, then continue from step 2 with the open questions first, editing the plan in place instead of creating a new file. Keep its number and original date, and record notable changes in the plan.
 
 1. **Context.** Read `docs/status.md`, `docs/plans/README.md`, and `docs/plans/TEMPLATE.md`. Use the `AGENTS.md` routing table to open only the relevant docs, RFCs, and code.
@@ -26,7 +28,7 @@ Design with the owner; write no application code. The workflow's rules (stages, 
 4. **Check.** Run the documentation and format checks listed in `AGENTS.md`.
 5. **Approval.** The plan stays **Draft** until the owner explicitly approves it; never mark it Approved on your own judgment.
    - If Open questions is not empty, list the questions, keep it Draft, and stop here.
-   - Otherwise, give a short review summary: goal, scope, non-goals, the key decisions already made, acceptance criteria, and any "Stop and ask if" conditions. Then ask the owner to choose (use AskUserQuestion when available): **Approve**, **Revise** (say what to change), or **Keep as Draft**.
+   - Otherwise, give a short review summary: goal, scope, non-goals, the key decisions already made, acceptance criteria, and any "Stop and ask if" conditions. Then ask the owner to choose (use an available user-question tool when appropriate, otherwise ask in conversation): **Approve**, **Revise** (say what to change), or **Keep as Draft**.
    - **Approve:** set `Status: Approved` and the `Approved:` date in the plan, update its row in `docs/plans/README.md` and the Plans section of `docs/status.md`, and re-run the documentation checks.
    - **Revise:** make the changes, then ask again.
 6. **Report.** Give the plan path and its status. If Approved, tell the owner the next step: `/implement-plan NNNN`, ideally in a fresh session so the plan alone carries the context. Offer to commit the plan.

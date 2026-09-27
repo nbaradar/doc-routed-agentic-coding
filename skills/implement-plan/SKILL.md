@@ -5,6 +5,8 @@ description: Implement an Approved implementation plan from docs/plans/ end to e
 
 # Implement an approved plan
 
+Command examples below use Claude Code syntax (`/skill-name`). In Codex, use `$skill-name` instead, including in suggested next steps.
+
 The workflow's rules and the Definition of Done are in the project's `AGENTS.md`; this skill is the procedure for following them. If the repository has no `docs/plans/`, say so and suggest `/adopt-routed-workflow`.
 
 The argument is a plan number or path. If none is given, use the plan that `docs/status.md` names as in progress or next, and confirm it with the owner.

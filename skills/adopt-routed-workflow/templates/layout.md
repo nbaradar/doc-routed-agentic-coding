@@ -3,7 +3,7 @@
 Adapt to the project; omit what it doesn't need. The workflow skills are installed per user, not stored in the project.
 
 ```text
-CLAUDE.md                 "@AGENTS.md" (Claude Code loads the contract automatically)
+CLAUDE.md                 "@AGENTS.md" (only if Claude Code is used; imports the contract)
 AGENTS.md                 always-loaded rules + "Where to look" routing table + workflow + Definition of Done
 PLAN.md                   vision, non-goals, phases, open decisions (moved sections leave "Moved to" pointers)
 README.md                 for humans: capabilities table, how it's built, setup, troubleshooting

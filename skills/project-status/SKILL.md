@@ -5,6 +5,8 @@ description: Give the owner a short status report — last thing built, what is 
 
 # Project status
 
+Command examples below use Claude Code syntax (`/skill-name`). In Codex, use `$skill-name` instead, including in suggested next steps.
+
 Report briefly. Read only what is listed here; do not explore the codebase. If the repository has no `docs/status.md`, say so and suggest `/adopt-routed-workflow`.
 
 ## Read

@@ -5,9 +5,11 @@ description: Migrate a repository to documentation-routed agentic coding — a l
 
 # Adopt the documentation-routed workflow
 
+Command examples below use Claude Code syntax (`/skill-name`). In Codex, use `$skill-name` instead, including in suggested next steps.
+
 Set up, or migrate the current repository to, this structure:
 
-- **Contract:** `AGENTS.md` holds only the rules that always apply, plus a "Where to look" routing table. `CLAUDE.md` contains `@AGENTS.md`.
+- **Contract:** `AGENTS.md` holds only the rules that always apply, plus a "Where to look" routing table. If Claude Code is used, `CLAUDE.md` contains `@AGENTS.md`.
 - **Topic docs:** under `docs/`, each with `summary`/`read_when` front matter and listed in `docs/README.md`.
 - **Work artifacts:** `docs/status.md` (replaced each unit), `docs/history.md` (one dated entry per unit), `docs/decisions/` (RFCs), and `docs/plans/` (implementation plans with a lifecycle).
 - **Workflow:** design → plan (owner approval) → implement → Definition of Done. The rules live in the project's `AGENTS.md`, so the repository documents its own workflow for any agent or tool. The `/project-status`, `/plan-unit`, and `/implement-plan` skills are optional procedures for following those rules; they are installed once per user from this skill's repository, not copied into projects.
@@ -40,7 +42,7 @@ If it is borderline (for example, one short `CLAUDE.md`), use migration mode: it
 
 ## 1. Assess (read-only; in setup mode, only the check commands and source layout)
 
-- Inventory every agent-facing and project doc: `AGENTS.md`, `CLAUDE.md`, `PLAN.md`, `README.md`, `docs/**`, `.cursorrules`, `.github/copilot-instructions.md`, existing ADRs or specs, and existing `.claude/skills/`.
+- Inventory every agent-facing and project doc: `AGENTS.md`, `CLAUDE.md`, `PLAN.md`, `README.md`, `docs/**`, `.cursorrules`, `.github/copilot-instructions.md`, existing ADRs or specs, and existing `.claude/skills/` and `.agents/skills/`.
 - Measure what loads by default with `python3 <skill-dir>/scripts/measure.py <files…>` (words and estimated tokens, characters ÷ 4). Include every file the agent loads automatically, plus any the user habitually references with `@`.
 - Identify the project's check commands (format, lint, typecheck, test, build, integration) and its test runner and language.
 - Classify each section of the existing docs as one of: **rule** (applies to every task), **topic reference** (architecture, conventions, integrations, domain model), **rationale**, **roadmap/vision**, **current status**, **history/changelog**, **human-facing** (setup, usage), or **stale** (contradicted by the code).
@@ -82,7 +84,7 @@ Create these from `templates/`, adapting names, commands, and routing rows to th
 | `.github/pull_request_template.md` (if the project uses GitHub PRs) | `templates/pull_request_template.md` |
 | `scripts/check-docs.mjs` | `scripts/check-docs.mjs` (adjust its config block) |
 
-Do not copy the workflow skills into the project. Check whether `/project-status`, `/plan-unit`, and `/implement-plan` are installed for the user (for example, in `~/.claude/skills/`). If they are missing, tell the user to run `./install.sh` (or `./install.sh --link`) from the repository this skill came from; the project works without them, because the rules are in `AGENTS.md`. If the project already has its own copies in `.claude/skills/`, point out that per-user and project skills with the same name conflict, and ask before removing the project copies.
+Do not copy the workflow skills into the project. Check whether `project-status`, `plan-unit`, and `implement-plan` are available in the current tool. Personal installation locations are `~/.claude/skills/` for Claude Code and `~/.agents/skills/` for Codex. If missing, recommend `./install.sh claude`, `./install.sh codex`, or `./install.sh both` from this skill's source repository; add `--link` to link to the clone. The project works without these skills because the rules are in `AGENTS.md`. If project copies exist in `.claude/skills/` or `.agents/skills/`, point out that duplicate names can cause ambiguity and ask before removing any copies.
 
 Wire `check-docs.mjs` into the project's normal checks (for example, a `docs:check` package script run by the test command or CI) and list it in `AGENTS.md`'s commands and Definition of Done. Existing project work that is already specified becomes a Draft plan (with the original text kept verbatim in a "Source handoff" section), not prose in `status.md`.
 
@@ -98,4 +100,4 @@ Offer this only after the verbatim migration is reviewed or committed. Condense 
 
 ## 7. Report
 
-Report the mode used, the token estimates (migration: before and after for the default load, a planning session, and all docs; setup: the default load and a planning session), the new layout, anything corrected or deduplicated, what was not verified, and a suggested commit message that includes the token figures, labelled as estimates. Commit only if the user asks. Tell the user the skills may need a Claude Code restart to appear.
+Report the mode used, the token estimates (migration: before and after for the default load, a planning session, and all docs; setup: the default load and a planning session), the new layout, anything corrected or deduplicated, what was not verified, and a suggested commit message that includes the token figures, labelled as estimates. Commit only if the user asks. If installed skills do not appear, tell the user to restart the tool they are using.

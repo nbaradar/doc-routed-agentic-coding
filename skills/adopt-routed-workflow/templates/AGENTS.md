@@ -36,7 +36,7 @@ The owner and an agent design together; an agent then implements alone because t
 3. **Implement.** Only Approved plans. Set it **In progress** and link it from `docs/status.md`. Follow its Decisions already made without re-asking, treat its Non-goals as hard boundaries, and stop under its "Stop and ask if" conditions and "When to stop and ask" below. A small change may proceed without a plan, but the Definition of Done still applies.
 4. **Finish.** Complete the Definition of Done before reporting done.
 
-Optional Claude Code skills, installed per user from the `doc-routed-agentic-coding` repository: `/project-status` (short status report), `/plan-unit` (design, plan, approval, resume a Draft), `/implement-plan` (implement and finish). The rules above apply with or without them.
+Optional Claude Code and Codex skills, installed per user from the `doc-routed-agentic-coding` repository: `/project-status` (short status report), `/plan-unit` (design, plan, approval, resume a Draft), `/implement-plan` (implement and finish). In Codex, invoke these as `$project-status`, `$plan-unit`, and `$implement-plan`. The rules above apply with or without them.
 
 ### Definition of Done
 
